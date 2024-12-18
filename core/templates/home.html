@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+    <h1>Welcome to the User Auth App</h1>
+    <p>This is the home page for the User Auth App.</p>
+{% endblock %}
