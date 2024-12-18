@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}Ingreso al sistema{% endblock %}
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Ingresa tus credenciales</h2>
+                        <hr>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form }}
+                            <input type="submit" class="btn btn-primary" value="Ingresar">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+/* Estilo general del nav */
+.nav {
+    display: flex;
+    justify-content: space-between; /* Home a la izquierda, resto a la derecha */
+    align-items: center;
+    background-color: #333; /* Color del fondo */
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+/* Estilo de las listas */
+.nav ul {
+    display: flex;
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0;
+    margin: 0;
+}
+
+/* Espaciado entre los elementos de la lista */
+.nav ul li {
+    margin-right: 20px; /* Espaciado entre enlaces */
+}
+
+/* Estilo para enlaces y botones dentro de la lista */
+.nav ul li a,
+.nav ul li button {
+    color: white; /* Color del texto */
+    text-decoration: none; /* Quitar subrayado */
+    background: none; /* Elimina fondo en botones */
+    border: none; /* Elimina bordes en botones */
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer; /* Hace que el puntero cambie en botones */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Suaviza el hover */
+    font-size: 1rem; /* Asegura un tamaño uniforme */
+    display: inline-block; /* Asegura que los botones se comporten como enlaces */
+}
+
+/* Hover en enlaces y botones */
+.nav ul li a:hover,
+.nav ul li button:hover {
+    background-color: #555; /* Fondo en hover */
+    color: #fff; /* Color del texto en hover */
+    border-radius: 5px;
+}
+
+/* Ajuste adicional para eliminar bordes activos en navegadores como Firefox */
+.nav ul li button:focus {
+    outline: none;
+}
+
+/* Contenedor del nav */
+.nav-right {
+    list-style: none; /* Elimina los puntos de la lista */
+    display: flex;
+    gap: 10px; /* Espaciado entre elementos */
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilo general para enlaces y botones */
+.nav-link {
+    color: white; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    background: none; /* Sin fondo */
+    border: none; /* Sin bordes */
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer; /* Cambia el puntero */
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Suaviza el hover */
+    display: inline-block; /* Garantiza comportamiento de bloque en línea */
+}
+
+/* Hover para enlaces y botones */
+.nav-link:hover {
+    background-color: #555; /* Fondo al pasar el mouse */
+    color: #fff; /* Cambia el color del texto */
+}
+
