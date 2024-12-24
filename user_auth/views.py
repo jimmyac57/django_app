@@ -8,10 +8,10 @@ from django.contrib.auth import login, logout
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)  # Pasamos los datos al formulario
-        if form.is_valid():  # Valida username y password automáticamente
-            user = form.get_user()  # Obtiene el usuario autenticado
-            login(request, user)  # Inicia sesión
+        form = AuthenticationForm(request, data=request.POST) 
+        if form.is_valid():  
+            user = form.get_user()  
+            login(request, user) 
             messages.success(request, f"Bienvenido de nuevo {user.username}!")
             return redirect('home')  # Redirige después del login
         else:

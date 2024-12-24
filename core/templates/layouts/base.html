@@ -21,6 +21,10 @@
                 <li><a href="{% url 'login' %}">Login</a></li>
                 <li><a href="{% url 'register' %}">Register</a></li>
                 {% endif %}
+
+                {% if user.is_authenticated and user.is_superuser %}
+            <li><a href="/admin/" class="btn btn-primary">Panel Admin</a></li>
+        {% endif %}
                 
             </ul>
         </nav>
