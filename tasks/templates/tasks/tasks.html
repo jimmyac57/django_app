@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+
+    <h1>Tasks</h1>
+    <hr>
+    {% if tasks %}
+            {% for task in tasks %}
+                <ul>{{ task.title }}
+                    <li>{{ task.description }}</li>
+                    <li>{{ task.important }}</li>
+                    <li>{{ task.user.username }}</li>
+                    {% if task.complete %}
+                    <li>{{ task.complete|date:'d/m/Y H:i' }}</li>
+                    {% endif %}
+                    
+                    <li><a href="{% url 'task_detail' task.id %}">modify</a></li>
+                    <hr>
+                </ul>
+            {% endfor %}
+    {% endif %}
+    
+       
+{% endblock %}
