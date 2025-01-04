@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}User Auth{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/core/base.css' %}">
+    {% block faviconico %}{% endblock %}
+    {% block css %}{% endblock %}
 </head>
 <body>
     <header>
@@ -16,6 +18,7 @@
 
             <ul class="nav-right">
                 {% if user.is_authenticated %}
+                <li><a href="{% url 'rutinas' %}">Workouts</a></li>
                 <li><a href="{% url 'tasks' %}">Tasks Pending</a></li>
                 <li><a href="{% url 'tasks_completed' %}">Tasks Completed</a></li>
                 <li><a href="{% url 'create_task' %}">Create Task</a></li>
@@ -27,7 +30,7 @@
                 {% endif %}
 
                 {% if user.is_authenticated and user.is_superuser %}
-            <li><a href="/admin/" class="btn btn-primary">{{user.username}}</a></li>
+            <li><a href="/admin/" >{{user.username}}</a></li>
             {% else %}
             <li><a href="#">{{ user.username }}</a></li>
         {% endif %}
@@ -37,12 +40,19 @@
     </header>
 
     <main>
+        <div class="messages">
+            {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2024 User Auth App</p>
+        <p>&copy; Jimmy APP</p>
     </footer>
+    {% block js %}{% endblock %}
 </body>
 </html>
