@@ -1,0 +1,45 @@
+{% extends 'gymtracker/base_gymtracker.html' %}
+{% load static %}
+{% block title %}Crear Nueva Rutina{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/exercises.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="routine">
+        <h2 class="routine__title">Crear Nueva Rutina</h2>
+        <form action="{% url 'crear_rutina' %}" method="post" class="routine__form">
+            {% csrf_token %}
+            <div class="routine__form-fields">
+                {{ form.as_p }}
+            </div>
+            <hr class="routine__divider">
+            <button type="button" id="open-modal" class="routine__add-exercise">Añadir Ejercicio</button>
+            <input type="hidden" name="selected_exercises" id="selected-exercises">
+            <div class="routine__exercises" id="container-selected-exercises"></div>
+            
+            <hr class="routine__divider">
+            
+
+            <button type="submit" class="routine__submit">Guardar Rutina</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal__content">
+        <span class="modal__close" id="close">&times;</span>
+        <h2 class="modal__title">Ejercicios</h2>
+        <div class="modal__exercises" id="container-exercises"></div>
+        <button class="modal__add-exercise" id="add-exercise">Agregar</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="module" src="{% static 'js/modal.js' %}"></script>
+<script type="module" src="{% static 'js/exercises.js' %}"></script>
+{% endblock %}

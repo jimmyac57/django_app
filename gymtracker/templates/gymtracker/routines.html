@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Routines{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="routines">
+        <h2>Routines</h2>
+        <a href="{% url 'crear_rutina' %}" class="btn btn-primary">Crear Nueva Rutina</a>
+        <hr>
+        <div class="routines-list">
+            {% if workout %}
+            <h3>Mis rutinas</h3>
+            {% endif %}
+            <ul>
+                {% for workout in workouts %}
+                <li>
+                    <a href="{% url 'workout' workout.id %}">{{ routine.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
