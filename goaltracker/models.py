@@ -8,7 +8,8 @@ class Goal(models.Model):
     desired_result = models.CharField(max_length=100)    
     system = models.CharField(max_length=200)         
     created_at = models.DateTimeField(auto_now_add=True)
-    end_at = models.DateTimeField(null=True, blank=True)  
+    end_at = models.DateField(null=True, blank=True)
+  
 
     STATUS_CHOICES = [
         ('active', 'Active'),

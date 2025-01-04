@@ -1,10 +1,20 @@
 {% extends 'goaltracker/base_goals.html' %}
+{% load static %}
+{% block title %}Create Goal{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/goaltracker/create_goal.css' %}">
+{% endblock %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-  {{ form.as_p }}
-    <button type="submit">Create Goal</button>
-
-</form>
+<div class="container">
+  <div class="form__container">
+    <h1>Create Goal</h1>
+    <hr>
+    <form action="" method="post" class="goal-form">
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit" class="form__button-submit">Create Goal</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

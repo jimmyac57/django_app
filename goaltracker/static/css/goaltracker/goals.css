@@ -1,0 +1,63 @@
+.goals-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .goals-container h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Tarjeta que envuelve cada meta */
+  .goal-card {
+    background-color: #fff; /* fondo blanco */
+    border: 1px solid #ddd; /* borde sutil */
+    border-radius: 8px;     /* esquinas redondeadas */
+    padding: 1rem;
+    margin-bottom: 1rem;    /* espacio entre tarjetas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* sombra leve */
+  }
+  
+  /* Listado de atributos de la meta */
+  .goal-info {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .goal-info li {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Estilo para el enlace de "Detail" */
+  .goal-detail-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    background-color: #007bff; /* azul */
+    color: #fff;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .goal-detail-link:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Botón/enlace para crear una nueva meta */
+  .create-goal-link {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: #28a745; /* verde */
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-goal-link:hover {
+    background-color: #218838;
+  }
+  

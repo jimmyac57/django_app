@@ -1,0 +1,49 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .form__container {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5rem;
+  }
+  
+  .goal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espacio entre cada campo */
+  }
+  
+  .goal-form label {
+    font-weight: 600;
+  }
+  
+  .goal-form input[type="text"],
+  .goal-form input[type="date"],
+  .goal-form input[type="datetime-local"],
+  .goal-form textarea,
+  .goal-form select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .form__button-submit {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .form__button-submit:hover {
+    background-color: #0056b3;
+  }
+  

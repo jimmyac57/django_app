@@ -1,1 +1,33 @@
 {% extends 'goaltracker/base_goals.html' %}
+{% load static %}
+{% block title %}Goals{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/goaltracker/goals.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="goals-container">
+    <h1>Goals</h1>
+    <hr>
+    
+    {% for goal in goals %}
+    <div class="goal-card">
+        <ul class="goal-info">
+            <li><strong>Desired Identity:</strong> {{ goal.desired_identity }}</li>
+            <li><strong>Desired Result:</strong> {{ goal.desired_result }}</li>
+            <li><strong>System:</strong> {{ goal.system }}</li>
+            {% if goal.end_at %}
+            <li><strong>End Date:</strong> {{ goal.end_at }}</li>
+            {% else %}
+            <li><strong>End Date:</strong> No limit</li>
+            {% endif %}
+            <li>
+                <a href="{% url 'goal_detail' goal_id=goal.id %}" class="goal-detail-link">Detail</a>
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+    
+    <a href="{% url 'create_goal' %}" class="create-goal-link">Create Goal</a>
+</div>
+{% endblock %}

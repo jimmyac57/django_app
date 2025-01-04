@@ -7,6 +7,10 @@ class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
         fields = ['desired_identity', 'desired_result', 'system', 'end_at']
+        widgets = {
+            'end_at': forms.DateInput(attrs={'type': 'date'}),
+            'system': forms.Textarea(attrs={'rows': 5, 'cols': 40}),
+        }
 
 
 class ObjectiveForm(forms.ModelForm):
