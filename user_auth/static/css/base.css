@@ -3,10 +3,11 @@
     display: flex;
     justify-content: space-between; /* Home a la izquierda, resto a la derecha */
     align-items: center;
-    background-color: #333; /* Color del fondo */
+    background-color: #00cc00; /* Color del fondo */
     border-radius: 5px;
     padding: 10px 20px;
 }
+
 
 /* Estilo de las listas */
 .nav ul {
@@ -77,4 +78,4 @@
     background-color: #555; /* Fondo al pasar el mouse */
     color: #fff; /* Cambia el color del texto */
 }
-
+ 

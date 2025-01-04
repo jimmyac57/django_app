@@ -1,0 +1,108 @@
+/* Fondo general */
+body {
+    background-color: #000000; /* Fondo negro */
+    color: #FFFFFF; /* Texto blanco */
+    font-family: 'Arial', sans-serif; /* Fuente moderna y clara */
+}
+
+/* Contenedor del formulario */
+.container {
+    background-color: #000000; /* Fondo negro */
+    border: 2px solid #00FF00; /* Borde verde eléctrico */
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 40px auto;
+    box-shadow: 0 0 15px #00FF00; /* Sutil brillo verde */
+}
+
+/* Títulos */
+h2 {
+    color: #00FF00; /* Verde eléctrico */
+    text-align: center;
+    text-shadow: 0 0 10px #00FF00; /* Efecto de brillo */
+}
+
+/* Botones */
+button {
+    background-color: #00CC00; /* Verde eléctrico */
+    color: #FFFFFF; /* Texto negro */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+button:hover {
+    background-color: rgba(0, 255, 0, 0.8); /* Verde con transparencia al hacer hover */
+    box-shadow: 0 0 15px #00FF00; /* Brillo verde eléctrico */
+    transform: scale(1.05); /* Sutil aumento en tamaño */
+}
+
+
+/* Inputs del formulario */
+form input {
+    width: 96%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #000000; /* Fondo negro */
+    color: #FFFFFF; /* Texto blanco */
+    box-shadow: 0 0 5px #00FF00; /* Sutil brillo */
+}
+
+form input:focus {
+    border: 2px solid #00FF00; /* Borde verde eléctrico */
+    outline: none; /* Elimina el outline predeterminado */
+}
+
+form input:-webkit-autofill {
+    background-color: #000000 !important; 
+    color: #FFFFFF !important; 
+    box-shadow: 0 0 5px #00FF00 !important;
+    -webkit-text-fill-color: #FFFFFF !important; 
+    transition: background-color 5000s ease-in-out 0s; 
+}
+
+form input:-webkit-autofill:focus {
+    border: 2px solid #00FF00; /* Asegura el borde verde eléctrico */
+    outline: none;
+}
+
+
+form label {
+    color: #FFFFFF; /* Etiquetas en blanco */
+    font-weight: bold;
+}
+
+/* Mensajes de error */
+.text-danger {
+    color: #00FF00; /* Verde eléctrico */
+    font-weight: bold;
+}
+
+
+/* Alertas */
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-shadow: 0 0 5px #00FF00; /* Sutil brillo */
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #00FF00; /* Verde eléctrico */
+    color: #000000; /* Texto negro */
+}
+
+.alert-error {
+    background-color: #000000; /* Fondo negro */
+    border: 2px solid #00FF00; /* Borde verde eléctrico */
+    color: #FFFFFF; /* Texto blanco */
+}
+
