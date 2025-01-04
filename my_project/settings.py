@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'core',
     'user_auth',
     'tasks',
-    'gymtracker'
+    'gymtracker',
+    'goaltracker',
 ]
 
 MIDDLEWARE = [

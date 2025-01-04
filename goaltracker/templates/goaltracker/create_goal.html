@@ -1,0 +1,10 @@
+{% extends 'goaltracker/base_goals.html' %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+  {{ form.as_p }}
+    <button type="submit">Create Goal</button>
+
+</form>
+{% endblock %}
