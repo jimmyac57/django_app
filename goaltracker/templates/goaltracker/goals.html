@@ -21,8 +21,14 @@
             {% else %}
             <li><strong>End Date:</strong> No limit</li>
             {% endif %}
+            <li><ul>{% for objective in goal.objectives.all %}
+                <li>{{ objective.name }}</li>
+                <li>{{ objective.value_by_period}} {{objective.unit_of_value}} {{ objective.type_period}}</li>
+                {% endfor %}
+            </ul></li>
             <li>
                 <a href="{% url 'goal_detail' goal_id=goal.id %}" class="goal-detail-link">Detail</a>
+                <a href="{% url 'create_objective' goal_id=goal.id %}" class="create-objective-link">Create Objective</a>
             </li>
         </ul>
     </div>

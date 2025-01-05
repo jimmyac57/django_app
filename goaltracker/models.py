@@ -26,6 +26,7 @@ class Goal(models.Model):
         return self.desired_identity
 
 class Objective(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     PERIOD_CHOICES = [
         ('daily', 'Daily'),
         ('weekly', 'Weekly'),
@@ -47,7 +48,7 @@ class Objective(models.Model):
         # ...
     ]
 
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal,related_name='objectives', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     type_period = models.CharField(max_length=10, choices=PERIOD_CHOICES)
     value_by_period = models.IntegerField()  
