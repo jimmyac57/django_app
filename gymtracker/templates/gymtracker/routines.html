@@ -16,11 +16,12 @@
             <h3>Mis rutinas</h3>
             {% endif %}
             <ul>
-                {% for workout in workouts %}
-                <li>
-                    <a href="{% url 'workout' workout.id %}">{{ routine.name }}</a>
-                </li>
-                {% endfor %}
+                {% for rutina in rutinas %}
+    <li>
+        <a href="{% url 'detalle_rutina' rutina.id %}">{{ rutina.nombre }}</a>
+        <!-- Aquí puedes mostrar más detalles o linkear a otra vista -->
+    </li>
+    {% endfor %}
             </ul>
         </div>
     </div>

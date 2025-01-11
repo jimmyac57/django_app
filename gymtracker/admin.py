@@ -5,5 +5,9 @@ from .models import EjercicioRutina
 # Register your models here.
 
 admin.site.register(Rutina)
-admin.site.register(Ejercicio)
+@admin.register(Ejercicio)
+class EjercicioAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'primary_muscle', 'secondary_muscle')
+    list_filter = ('primary_muscle',)
+
 admin.site.register(EjercicioRutina)

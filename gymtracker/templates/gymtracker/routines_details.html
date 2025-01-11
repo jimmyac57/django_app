@@ -1,0 +1,24 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Routines detail{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="routines__details">
+        
+        <h2>{{ rutina.nombre }}</h2>
+        <p>{{ rutina.user }}</p>
+        {% for ejercicio in ejercicios %}
+            <div class="routines__details__exercise">
+                <h3>{{ ejercicio.ejercicio.nombre }}</h3>
+                <p>orden:{{ ejercicio.orden }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock %}
+
