@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/core/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     {% block faviconico %}{% endblock %}
     {% block css %}{% endblock %}
 </head>
@@ -15,33 +17,58 @@
             <ul class="nav-left">
                 <li><a href="{% url 'home' %}">Home</a></li>
             </ul>
-
+    
             <ul class="nav-right">
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'rutinas' %}">Workouts</a></li>
-                <li><a href="{% url 'tasks' %}">Tasks Pending</a></li>
-                <li><a href="{% url 'tasks_completed' %}">Tasks Completed</a></li>
-                <li><a href="{% url 'create_task' %}">Create Task</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-                
+                    <!-- Categoría Tareas -->
+                    <li>
+                        <a href="#">Tareas  <i class="fas fa-chevron-down toggle-icon"></i></a>
+                        <ul>
+                            <li><a href="{% url 'tasks' %}">Tareas pendientes</a></li>
+                            <li><a href="{% url 'tasks_completed' %}">Tareas completadas</a></li>
+                            <li><a href="{% url 'create_task' %}">Crear nueva tarea</a></li>
+                        </ul>
+                    </li>
+    
+                    <!-- Categoría Rutinas -->
+                    <li>
+                        <a href="#">Rutinas  <i class="fas fa-chevron-down toggle-icon"></i></a>
+                        <ul>
+                            <li><a href="{% url 'rutinas' %}">Lista de Rutinas</a></li>
+                        </ul>
+                    </li>
+    
+                    <!-- Categoría Metas -->
+                    <li>
+                        <a href="#">Metas  <i class="fas fa-chevron-down toggle-icon"></i></a>
+                        <ul>
+                            <li><a href="{% url 'goals' %}">Metas pendientes</a></li>
+                        </ul>
+                    </li>
+    
+                    <!-- Logout -->
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'register' %}">Register</a></li>
+                    <!-- Login and Register for unauthenticated users -->
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
                 {% endif %}
-
+    
+                <!-- Admin/Superuser Access -->
                 {% if user.is_authenticated and user.is_superuser %}
-            <li><a href="/admin/" >{{user.username}}</a></li>
-            {% else %}
-            <li><a href="#">{{ user.username }}</a></li>
-        {% endif %}
-                
+                    <li><a href="/admin/">{{ user.username }}</a></li>
+                {% else %}
+                    <li><a href="#">{{ user.username }}</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
+    
 
     <main>
+        {% if messages %}
         <div class="messages">
-            {% if messages %}
+            
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
@@ -53,6 +80,8 @@
     <footer>
         <p>&copy; Jimmy APP</p>
     </footer>
-    {% block js %}{% endblock %}
+    {% block js %}
+        <script src="{% static 'js/base.js' %}"></script>
+    {% endblock %}
 </body>
 </html>
