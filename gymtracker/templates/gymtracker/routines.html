@@ -1,11 +1,13 @@
-{% extends 'layouts/base.html' %}
+{% extends 'gymtracker/base_gymtracker.html' %}
 {% load static %}
 {% block title %}Routines{% endblock %}
 
 {% block css %}
+{{ block.super }}
 {% endblock %}
 
 {% block content %}
+{{ block.super }}
 <div class="container">
     <div class="routines">
         <h2>Routines</h2>

@@ -3,6 +3,7 @@
 {% block title %}Crear Nueva Rutina{% endblock %}
 
 {% block css %}
+{{ block.super }}
 <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 <link rel="stylesheet" href="{% static 'css/exercises.css' %}">
 {% endblock %}
@@ -39,6 +40,7 @@
 {% endblock %}
 
 {% block js %}
+{{ block.super }}
 <script type="module" src="{% static 'js/modal.js' %}"></script>
 <script type="module" src="{% static 'js/exercises.js' %}"></script>
 {% endblock %}

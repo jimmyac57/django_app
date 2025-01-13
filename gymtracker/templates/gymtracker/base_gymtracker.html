@@ -1,4 +1,17 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+
 {% block faviconico %}<link rel="icon" type="image/x-icon" href="{% static 'images/dumbell.ico' %}">{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+{% endblock %}
