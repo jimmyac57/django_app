@@ -1,5 +1,7 @@
 {% extends 'base_activitylogger.html' %}
 {% load static %}
+{% load tz %}
+
 
 {% block css %}
     {{ block.super }}
@@ -13,7 +15,7 @@
     {% for activity in activity %}
     <div>
         <h2>Actividad: {{ activity.activity }}</h2>
-        <h3>Momento de inicio: {{ activity.time_start|date:"H:i" }}</h3>
+        <h3>Momento de inicio: {{ activity.time_start|localtime|date:"H:i" }}</h3>
         <h3 id="elapsed-time-{{ activity.id }}" data-start-time="{{ activity.time_start|date:'Y-m-d H:i:s' }}">
             Tiempo transcurrido: 0:00:00
         </h3>
