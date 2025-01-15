@@ -2,17 +2,6 @@ function padZero(num) {
     return num.toString().padStart(2, '0');
 }
 
-function updateClock() {
-    const now = new Date(); 
-    const hours = padZero(now.getHours());
-    const minutes = padZero(now.getMinutes());
-    const seconds = padZero(now.getSeconds());
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-
-    
-    console.log("Hora actual:", now);
-}
-
 
 function updateElapsedTime() {
     const elapsedElements = document.querySelectorAll('[id^="elapsed-time-"]');
@@ -45,9 +34,11 @@ if (startButton && activityForm) {
     });
 }
 
-setInterval(updateClock, 1000);
+
 setInterval(updateElapsedTime, 1000);
 
-
-updateClock();
 updateElapsedTime();
+
+fetch('/api/currentHour/')
+    .then(response => response.json())
+    .then(data => console.log(data));

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse
 from django.utils.timezone import localtime, now
 from .models import TimeLogger
 from .forms import ActivityForm
@@ -70,3 +71,8 @@ def endActivity(request, id):
         print(f"Error en endActivity: {e}")
         messages.error(request, f"An unexpected error occurred: {str(e)}")
         return redirect('activity_logger')
+    
+def currentHour(request):
+    # Obtener la fecha actual en la zona horaria local
+    current_hour= localtime(now()).strftime('%H:%M:%S')
+    return JsonResponse({'current_hour': current_hour})
