@@ -28,7 +28,8 @@ def activityLogger(request):
 def endActivity(request, id):
     if request.method == 'POST':
         activity = get_object_or_404(TimeLogger, id=id, user=request.user)
-        activity.time_end = timezone.now()  
+        activity.time_end = timezone.now() 
+        print("se esta terminando la actividad",activity.time_end) 
         activity.save()
         messages.success(request, f"La actividad '{activity.activity}' ha sido finalizada.")
         return redirect('activity_logger')  
