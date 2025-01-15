@@ -14,7 +14,7 @@
     <div>
         <h2>Actividad: {{ activity.activity }}</h2>
         <h3>Momento de inicio: {{ activity.time_start|localtime|date:"H:i:s" }}</h3>
-        <h3 id="elapsed-time-{{ activity.id }}" data-start-time="{{ activity.time_start|date:'Y-m-d H:i:s' }}">
+        <h3 id="elapsed-time-{{ activity.id }}" data-start-time="{{ activity.time_start|localtime|date:'c' }}">
             Tiempo transcurrido: 0:00:00
         </h3>
         <form action="{% url 'end_activity' activity.id %}" method="post">

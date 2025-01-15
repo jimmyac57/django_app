@@ -2,25 +2,40 @@ function padZero(num) {
     return num.toString().padStart(2, '0');
 }
 
+let ActualHour = new Date(); 
+
+
+
+fetch('/api/currentHour/')
+    .then(response => response.json())
+    .then(data => {   
+        ActualHour = new Date(data.current_hour); 
+    })
+    .catch(error => {
+        console.error("Error al obtener la hora del servidor:", error);
+    });
+
+function updateActualHour() {
+    ActualHour = new Date(ActualHour.getTime() + 1000); 
+}
+
 
 function updateElapsedTime() {
     const elapsedElements = document.querySelectorAll('[id^="elapsed-time-"]');
+
     elapsedElements.forEach(elapsedElement => {
         const startTime = new Date(elapsedElement.dataset.startTime); 
-        const now = new Date(); 
-        const diff = new Date(now - startTime); 
+        const diff = ActualHour - startTime; 
 
-        const hours = padZero(diff.getUTCHours());
-        const minutes = padZero(diff.getUTCMinutes());
-        const seconds = padZero(diff.getUTCSeconds());
+        if (diff > 0) {
+            const hours = padZero(Math.floor(diff / (1000 * 60 * 60)) % 24);
+            const minutes = padZero(Math.floor(diff / (1000 * 60)) % 60);
+            const seconds = padZero(Math.floor(diff / 1000) % 60);
 
-        elapsedElement.textContent = `Tiempo transcurrido: ${hours}:${minutes}:${seconds}`;
-
-        console.log("Start Time (data-start-time):", elapsedElement.dataset.startTime);
-        console.log("Start Time (parsed):", startTime);
-        console.log("Hora actual:", now);
-        console.log("Diferencia en milisegundos:", now - startTime);
-        console.log("Tiempo transcurrido: ", `${hours}:${minutes}:${seconds}`);
+            elapsedElement.textContent = `Tiempo transcurrido: ${hours}:${minutes}:${seconds}`;
+        } else {
+            elapsedElement.textContent = "Tiempo transcurrido: 00:00:00";
+        }
     });
 }
 
@@ -29,16 +44,8 @@ const activityForm = document.getElementById('activity-form');
 if (startButton && activityForm) {
     startButton.addEventListener('click', () => {
         activityForm.style.display = 'block';
-
-        console.log("Formulario de actividad mostrado.");
     });
 }
 
-
+setInterval(updateActualHour, 1000);
 setInterval(updateElapsedTime, 1000);
-
-updateElapsedTime();
-
-fetch('/api/currentHour/')
-    .then(response => response.json())
-    .then(data => console.log(data));

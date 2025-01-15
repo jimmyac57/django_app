@@ -73,6 +73,7 @@ def endActivity(request, id):
         return redirect('activity_logger')
     
 def currentHour(request):
-    # Obtener la fecha actual en la zona horaria local
-    current_hour= localtime(now()).strftime('%H:%M:%S')
-    return JsonResponse({'current_hour': current_hour})
+    # Obtiene la fecha/hora local como un objeto datetime aware
+    current_dt = localtime(now())
+    # Devuelve la representación en formato ISO 8601
+    return JsonResponse({'current_hour': current_dt.isoformat()})
