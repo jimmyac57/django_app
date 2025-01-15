@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.utils.timezone import localtime, timezone
+from django.utils.timezone import localtime, now
 from .models import TimeLogger
 from .forms import ActivityForm
 
@@ -36,7 +36,7 @@ def endActivity(request, id):
     try:
         if request.method == 'POST':
             activity = get_object_or_404(TimeLogger, id=id, user=request.user)
-            activity.time_end = timezone.now()  # Registrar hora de finalización en UTC
+            activity.time_end = now()  # Registrar hora de finalización en UTC
             activity_duration = localtime(activity.time_end) - localtime(activity.time_start)  # Duración en zona local
 
             print("Se está terminando la actividad:", localtime(activity.time_end))
