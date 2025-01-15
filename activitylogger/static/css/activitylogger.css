@@ -1,0 +1,11 @@
+body {
+    text-align: center;
+}
+#clock {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#activity-form{
+    display: none;
+}

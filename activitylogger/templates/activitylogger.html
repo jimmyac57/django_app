@@ -1,0 +1,41 @@
+{% extends 'base_activitylogger.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/activitylogger.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Cronómetro con Hora Actual</h1>
+<div id="clock">00:00:00</div>
+{% if activity %}
+    {% for activity in activity %}
+    <div>
+        <h2>Actividad: {{ activity.activity }}</h2>
+        <h3>Tiempo que inició: {{ activity.time_start|date:"H:i" }}pm</h3>
+        <h3 id="elapsed-time-{{ activity.id }}" data-start-time="{{ activity.time_start|date:'Y-m-d H:i:s' }}">
+            Tiempo transcurrido: 0:00:00
+        </h3>
+        <form action="{% url 'end_activity' activity.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Terminar Actividad</button>
+        </form>
+    </div>
+    {% endfor %}
+{% else %}
+    <button id="start-activity">Iniciar Actividad</button>
+    <div id="activity-form" style="display: none;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button>Iniciar</button>
+        </form>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/activitylogger.js' %}"></script>
+{% endblock %}
