@@ -25,5 +25,6 @@ urlpatterns = [
     path('tasks/', include('tasks.urls')),
     path('', include('gymtracker.urls')),
     path('', include('goaltracker.urls')),
+    path('', include('activitylogger.urls')),
     
 ]
