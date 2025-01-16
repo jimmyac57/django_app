@@ -4,23 +4,42 @@
 
 {% block content %}
 
-    <h1>Tasks</h1>
-    <hr>
-    {% if tasks %}
-            {% for task in tasks %}
-                <ul>{{ task.title }}
-                    <li>{{ task.description }}</li>
-                    <li>{{ task.important }}</li>
-                    <li>{{ task.user.username }}</li>
-                    {% if task.complete %}
-                    <li>{{ task.complete|date:'d/m/Y H:i' }}</li>
-                    {% endif %}
-                    
-                    <li><a href="{% url 'task_detail' task.id %}">modify</a></li>
-                    <hr>
-                </ul>
-            {% endfor %}
-    {% endif %}
-    
-       
+<div class="d-flex justify-content-between align-items-center my-4">
+    <h1 class="mb-0 ">Tasks</h1>
+    <div>
+        {% if request.resolver_match.url_name == "tasks" %}
+        <a href="{% url 'tasks_completed' %}" class="btn btn-secondary me-2">Completed Tasks</a>
+        {% elif request.resolver_match.url_name == "tasks_completed" %}
+        <a href="{% url 'tasks' %}" class="btn btn-secondary me-2">Pending Tasks</a>
+        {% endif %}
+        <a href="{% url 'create_task' %}" class="btn btn-success">Add Task</a>
+    </div>
+</div>
+<hr>
+{% if tasks %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for task in tasks %}
+        <div class="col">
+            <!-- Clase adicional para resaltar tareas importantes -->
+            <div class="card h-100 {% if task.important %}border-danger{% else %}border-secondary{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold {% if task.important %}text-danger{% endif %}">{{ task.title }}</h5>
+                    <p class="card-text">
+                        <strong>Description:</strong> {{ task.description }}<br>
+                        {% if task.complete %}
+                        <strong>Completed:</strong> {{ task.complete|date:'d/m/Y H:i' }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'task_detail' task.id %}" class="btn btn-primary btn-sm">Modify</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">No tasks available.</p>
+{% endif %}
+
 {% endblock %}

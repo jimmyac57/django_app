@@ -1,22 +1,40 @@
 {% extends 'layouts/base.html' %}
-{% block title %}task detail{% endblock %}
+{% block title %}Task Detail{% endblock %}
 
 {% block content %}
-    <h1>task detail</h1>
-    <hr>
-    <form  method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button>Modify</button>
-    </form>
+<div class="container my-5 d-flex justify-content-center">
+    <div class="col-12 col-md-6">
+        <h1 class="mb-4 text-center">Task Detail</h1>
+        <hr>
 
-    <form action="{% url 'complete_task' task_id=task.id %}" method="POST">
-        {% csrf_token %}
-        <button>Complete</button>
-    </form>
-
-    <form action="{% url 'delete_task' task_id=task.id %}" method="POST">
-        {% csrf_token %}
-        <button>delete</button>
-    </form>
+        <form method="POST" class="p-4 border rounded bg-light shadow-sm">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title</label>
+                {{ form.title }}
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+            
+            <div class="form-check mb-4">
+                {{ form.important }}
+                <label for="id_important" class="form-check-label">Important</label>
+            </div>
+            
+            <div class="d-flex justify-content-between gap-2">
+                <button class="btn btn-primary w-100" type="submit">Modify</button>
+                {% if task.complete %}
+                <button class="btn btn-warning w-100" formaction="{% url 'mark_incomplete' task_id=task.id %}" formmethod="POST">Mark as Incomplete</button>
+                {% else %}
+                <button class="btn btn-success w-100" formaction="{% url 'complete_task' task_id=task.id %}" formmethod="POST">Complete</button>
+                {% endif %}
+                <button class="btn btn-danger w-100" formaction="{% url 'delete_task' task_id=task.id %}" formmethod="POST">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
