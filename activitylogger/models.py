@@ -20,8 +20,8 @@ class TimeLogger(models.Model):
     def formatted_duration(self):
         if self.duration:
             total_seconds = int(self.duration.total_seconds())
-            days, remainder = divmod(total_seconds, 86400)  # 86400 seconds in a day
-            hours, remainder = divmod(remainder, 3600)      # 3600 seconds in an hour
+            days, remainder = divmod(total_seconds, 86400)  
+            hours, remainder = divmod(remainder, 3600)     
             minutes, seconds = divmod(remainder, 60)
             if days > 0:
                 return f"{days} day{'s' if days > 1 else ''}, {hours}:{minutes:02}:{seconds:02}"
