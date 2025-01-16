@@ -4,8 +4,6 @@ function padZero(num) {
 
 let ActualHour = new Date(); 
 
-
-
 fetch('/api/currentHour/')
     .then(response => response.json())
     .then(data => {   
@@ -32,9 +30,9 @@ function updateElapsedTime() {
             const minutes = padZero(Math.floor(diff / (1000 * 60)) % 60);
             const seconds = padZero(Math.floor(diff / 1000) % 60);
 
-            elapsedElement.textContent = `Tiempo transcurrido: ${hours}:${minutes}:${seconds}`;
+            elapsedElement.innerHTML = `<strong>Elapsed Time:</strong> ${hours}:${minutes}:${seconds}`;
         } else {
-            elapsedElement.textContent = "Tiempo transcurrido: 00:00:00";
+            elapsedElement.innerHTML = "<strong>Elapsed Time:</strong> 00:00:00";
         }
     });
 }
