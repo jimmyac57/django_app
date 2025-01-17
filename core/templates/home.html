@@ -2,7 +2,19 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
+<div class="container d-flex justify-content-center align-items-center ">
+    <div class="text-center bg-light p-5 rounded shadow">
+        <section class="welcome-section">
+            {% if user.is_authenticated %}
+            <h1 class="display-4">Welcome to My Management App, {{ user.username }}!</h1>
+            <p>Try to add tasks or manage your time in log!</p>
+            {% else %}
+            <h1 class="display-4">Welcome to My Management App!</h1>
+            <p class="lead">Please <a href="{% url 'login' %}" class="btn btn-primary">Login</a> or 
+               <a href="{% url 'register' %}" class="btn btn-secondary">Register</a> to use the modules!</p>
+            {% endif %}
+        </section>
+    </div>
+</div>
 
-    <h1>Welcome to the User Auth App</h1>
-    <p>This is the home page for the User Auth App.</p>
 {% endblock %}
