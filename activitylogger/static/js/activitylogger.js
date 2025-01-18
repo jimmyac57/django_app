@@ -42,8 +42,32 @@ const activityForm = document.getElementById('activity-form');
 if (startButton && activityForm) {
     startButton.addEventListener('click', () => {
         activityForm.style.display = 'block';
+        newActivityForm.style.display = 'none';
     });
 }
 
 setInterval(updateActualHour, 1000);
 setInterval(updateElapsedTime, 1000);
+
+const newActivityForm = document.getElementById('new-activity-form');
+const newActivityBtn =  document.getElementById('new-activity-btn');
+
+newActivityBtn.addEventListener('click', () => {
+    newActivityForm.style.display = 'block';
+    activityForm.style.display = 'none';
+});
+
+document.querySelector('form').addEventListener('submit', function (event) {
+    const selectField = document.getElementById('id_activity');
+    if (!selectField.value) {
+        event.preventDefault(); 
+        selectField.classList.add('is-invalid');
+        selectField.addEventListener('change', () => {
+            selectField.classList.remove('is-invalid');
+            selectField.parentElement.querySelector('.invalid-feedback').style.display = 'none';
+        });
+        selectField.parentElement.querySelector('.invalid-feedback').style.display = 'block';
+
+
+    }
+});

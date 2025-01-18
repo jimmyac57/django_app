@@ -6,6 +6,6 @@ body {
     font-weight: bold;
 }
 
-#activity-form{
+#activity-form,#new-activity-form {
     display: none;
 }
