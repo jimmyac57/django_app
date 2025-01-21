@@ -40,7 +40,7 @@
             <div class="mb-3">
                 <label for="id_activity" class="form-label">Activity:</label>
                 <select id="id_activity" name="activity" class="form-select">
-                    <option value="" selected>Seleccione una actividad</option>
+                    <option value="" selected>Select an Activity</option>
                     {% for activity in form.fields.activity.queryset %}
                         <option value="{{ activity.id }}">{{ activity.name }}</option>
                     {% endfor %}

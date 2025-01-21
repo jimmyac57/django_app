@@ -16,12 +16,12 @@ class TimeLoggerForm(forms.ModelForm):
             self.fields['activity'].queryset = Activity.objects.none()
 
     
-        self.fields['activity'].empty_label = "Seleccione una actividad"
+        self.fields['activity'].empty_label = "Select an activity"
 
     def clean_activity(self):
         activity = self.cleaned_data.get('activity')
         if not activity:  
-            raise forms.ValidationError("Debe seleccionar una actividad válida.")
+            raise forms.ValidationError("You must select a valid actitivy.")
         return activity
 
 
