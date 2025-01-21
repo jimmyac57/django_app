@@ -1,8 +1,8 @@
 from django import forms
-from .models import Rutina
+from .models import Workout
 
 
-class CrearRutinaForm(forms.ModelForm):
+class CreateWorkoutForm(forms.ModelForm):
     class Meta:
-        model = Rutina
-        fields = ['nombre']
+        model = Workout
+        fields = ['name']

@@ -1,132 +1,135 @@
-'use strict';
-import { cerrarModal } from './modal.js';
 
-// Arrays globales para manejar la selección
-let ejercicios = [];
-let ejerciciosSeleccionados = [];
-let nombreEjerciciosSeleccionados = [];
+// Array para almacenar los ejercicios seleccionados y añadidos
+let selectedExercises = [];
 
-// Mapa para guardar la referencia (idEjercicio -> inputHidden)
-let inputMap = {};
+// Referencia al botón de "Add Selected Exercises"
+const addSelectedButton = document.getElementById('btn-guardar-seleccion');
 
-// Al cargar la página, hacemos el fetch de los ejercicios
-window.addEventListener('DOMContentLoaded', () => {
-    fetch('/api/exercises') // Ajusta la ruta a tu backend
-        .then(response => response.json())
-        .then(data => {
-            ejercicios = data; // Guardamos todos los ejercicios en el array global
-            console.log('Ejercicios cargados:', ejercicios);
-        })
-        .catch(error => console.error('Error al cargar ejercicios:', error));
-});
-
-/**
- * Función para mostrar (o recargar) los ejercicios en el contenedor (modal).
- * Se llama al hacer clic en “Abrir Modal”.
- */
-function mostrarEjercicios() {
-    const contenedor = document.getElementById('container-exercises');
-    contenedor.innerHTML = ''; // Limpia el contenedor
-
-    ejercicios.forEach(ejercicio => {
-        const div = document.createElement('div');
-        div.className = 'modal__exercise-item';
-        div.id = ejercicio.id;
-
-        // Plantilla del contenido de cada ejercicio
-        div.innerHTML = `
-          <img class="modal__exercise-image" src="${ejercicio.ruta_imagen}" alt="Imagen de ${ejercicio.nombre}">
-          <div class="modal__exercise-info">
-              <h3 class="modal__exercise-title">${ejercicio.nombre}</h3>
-              <p class="modal__exercise-primary">Músculo principal: <strong>${ejercicio.primary_muscle}</strong></p>
-              <p class="modal__exercise-secondary">Músculos secundarios: ${ejercicio.secondary_muscle}</p>
-          </div>
-        `;
-
-        // Al hacer clic en un ejercicio, lo seleccionamos o lo deseleccionamos
-        div.addEventListener('click', () => {
-            console.log(`Click en el ejercicio con ID ${ejercicio.id}`);
-
-            if (ejerciciosSeleccionados.includes(ejercicio.id)) {
-                // Si ya estaba seleccionado, lo quitamos
-                div.classList.remove('selected');
-                ejerciciosSeleccionados = ejerciciosSeleccionados.filter(id => id !== ejercicio.id);
-                nombreEjerciciosSeleccionados = nombreEjerciciosSeleccionados.filter(nom => nom !== ejercicio.nombre);
-
-                // Eliminamos también el input hidden correspondiente, si existe
-                if (inputMap[ejercicio.id]) {
-                    const form = document.getElementById('myForm');
-                    form.removeChild(inputMap[ejercicio.id]);
-                    delete inputMap[ejercicio.id];
-                }
-            } else {
-                // Si NO estaba seleccionado, lo agregamos
-                div.classList.add('selected');
-                ejerciciosSeleccionados.push(ejercicio.id);
-                nombreEjerciciosSeleccionados.push(ejercicio.nombre);
-
-                // Creamos y agregamos el input hidden al formulario
-                const form = document.getElementById('myForm');
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'ejercicios[]'; // Al backend llegará como lista de IDs
-                hiddenInput.value = ejercicio.id;
-                form.appendChild(hiddenInput);
-
-                // Guardamos la referencia en el mapa
-                inputMap[ejercicio.id] = hiddenInput;
-            }
-
-            // Mostramos u ocultamos el botón "Guardar selección"
-            mostrarOcultarBoton();
-
-            console.log('IDs seleccionados:', ejerciciosSeleccionados);
-            console.log('Nombres seleccionados:', nombreEjerciciosSeleccionados);
-        });
-
-        // Añadimos el div al contenedor
-        contenedor.appendChild(div);
-    });
-}
-
-// Escucha el clic en “Abrir Modal” para mostrar los ejercicios
-document.getElementById('open-modal').addEventListener('click', mostrarEjercicios);
-
-/**
- * Muestra la lista de ejercicios seleccionados en el contenedor “contenedor-seleccionados”.
- * Se llama al hacer clic en “Guardar selección”.
- */
-function actualizarListaSeleccionados() {
-    const contenedorSeleccionados = document.getElementById('contenedor-seleccionados');
-    contenedorSeleccionados.innerHTML = ''; // Limpia lo anterior
-
-    const ul = document.createElement('ul');
-
-    nombreEjerciciosSeleccionados.forEach(nombre => {
-        const li = document.createElement('li');
-        li.textContent = nombre;
-        ul.appendChild(li);
-    });
-
-    contenedorSeleccionados.appendChild(ul);
-}
-
-// Al hacer clic en “Guardar selección”, actualizamos la lista y (opcional) cerramos el modal
-document.getElementById('btn-guardar-seleccion').addEventListener('click', () => {
-    actualizarListaSeleccionados();
-    // Aquí podrías cerrar el modal si lo tienes implementado con alguna librería
-    cerrarModal();
-    console.log('Selección guardada (en UI).');
-});
-
-/**
- * Muestra u oculta el botón “Guardar selección” en función de si hay ejercicios seleccionados.
- */
-function mostrarOcultarBoton() {
-    const btnGuardar = document.getElementById('btn-guardar-seleccion');
-    if (nombreEjerciciosSeleccionados.length > 0) {
-        btnGuardar.style.display = 'block';
+// Función para actualizar el texto del botón
+function updateSelectedButtonText() {
+    const count = selectedExercises.length; // Número de ejercicios seleccionados
+    if (count > 0) {
+        addSelectedButton.textContent = `Add Selected Exercises (${count})`;
     } else {
-        btnGuardar.style.display = 'none';
+        addSelectedButton.textContent = 'Add Selected Exercises';
     }
 }
+
+// Escuchar clicks en los ejercicios dentro del modal
+document.getElementById('container-exercises').addEventListener('click', (event) => {
+    // Buscar el contenedor principal del ejercicio clicado
+    const exerciseItem = event.target.closest('.exercise-item');
+    if (exerciseItem) {
+        const exerciseId = exerciseItem.getAttribute('data-id');
+        const exerciseName = exerciseItem.querySelector('.exercise-name').textContent.trim();
+
+        // Verificar si el ejercicio ya está seleccionado
+        const index = selectedExercises.findIndex(exercise => exercise.id === exerciseId);
+        if (index >= 0) {
+            // Si ya está seleccionado, lo quitamos del array
+            selectedExercises.splice(index, 1);
+            exerciseItem.classList.remove('active', 'border-primary', 'bg-light'); // Cambiar estilo al desmarcar
+        } else {
+            // Si no está seleccionado, lo añadimos al array
+            selectedExercises.push({ id: exerciseId, name: exerciseName });
+            exerciseItem.classList.add('active', 'border-primary', 'bg-light'); // Cambiar estilo al marcar
+        }
+
+        // Actualizar el texto del botón
+        updateSelectedButtonText();
+    }
+});
+
+// Añadir ejercicios seleccionados al contenedor al presionar "Add Selected Exercises"
+addSelectedButton.addEventListener('click', () => {
+    const selectedContainer = document.getElementById('contenedor-seleccionados');
+
+    // Recorrer los ejercicios seleccionados
+    selectedExercises.forEach(exercise => {
+        // Verificar si ya fue añadido previamente al formulario
+        const existingInput = document.querySelector(`input[value="${exercise.id}"]`);
+        if (!existingInput) {
+            // Añadir al contenedor si no existe
+            const selectedItem = document.createElement('div');
+            selectedItem.className = 'selected-exercise mb-2 d-flex align-items-center justify-content-between';
+            selectedItem.innerHTML = `
+                <input type="hidden" name="ejercicios[]" value="${exercise.id}">
+                <span>${exercise.name}</span>
+                <button type="button" class="btn btn-danger btn-sm ms-2">Remove</button>
+            `;
+            selectedContainer.appendChild(selectedItem);
+        }
+    });
+
+    // Eliminar los ejercicios desmarcados del contenedor
+    const selectedContainerItems = Array.from(selectedContainer.children);
+    selectedContainerItems.forEach(item => {
+        const input = item.querySelector('input');
+        const exerciseId = input.value;
+
+        // Si el ejercicio no está en `selectedExercises`, lo eliminamos del contenedor
+        if (!selectedExercises.some(exercise => exercise.id === exerciseId)) {
+            item.remove();
+        }
+    });
+
+    // Actualizar el texto del botón después de agregar
+    updateSelectedButtonText();
+});
+
+// Restaurar el estilo de los ejercicios seleccionados al abrir el modal
+document.getElementById('open-modal').addEventListener('click', () => {
+    const exerciseItems = document.querySelectorAll('#container-exercises .exercise-item');
+    exerciseItems.forEach(item => {
+        const exerciseId = item.getAttribute('data-id');
+        if (selectedExercises.some(exercise => exercise.id === exerciseId)) {
+            item.classList.add('active', 'border-primary', 'bg-light'); // Restaurar el estilo de los seleccionados
+        } else {
+            item.classList.remove('active', 'border-primary', 'bg-light'); // Asegurarse de que los no seleccionados no tengan el estilo
+        }
+    });
+
+    // Actualizar el texto del botón cuando se abre el modal
+    updateSelectedButtonText();
+});
+
+// Eliminar ejercicios del contenedor seleccionado
+document.getElementById('contenedor-seleccionados').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const parentDiv = event.target.parentNode;
+        const input = parentDiv.querySelector('input');
+        const exerciseId = input.value;
+
+        // Remover el ejercicio del array `selectedExercises`
+        selectedExercises = selectedExercises.filter(exercise => exercise.id !== exerciseId);
+
+        // Remover el elemento del contenedor
+        parentDiv.remove();
+
+        // Actualizar el estilo en el modal si está abierto
+        const exerciseItem = document.querySelector(`#container-exercises .exercise-item[data-id="${exerciseId}"]`);
+        if (exerciseItem) {
+            exerciseItem.classList.remove('active', 'border-primary', 'bg-light');
+        }
+
+        // Actualizar el texto del botón
+        updateSelectedButtonText();
+    }
+});
+
+document.getElementById('filter-muscle').addEventListener('change', function () {
+    const selectedMuscle = this.value.toLowerCase(); // Valor del filtro en minúsculas
+    const exercises = document.querySelectorAll('#container-exercises .exercise-item');
+
+    exercises.forEach(exercise => {
+        const muscle = (exercise.getAttribute('data-muscle') || '').toLowerCase(); // Atributo data-muscle en minúsculas
+        // Coincide completamente o contiene el músculo seleccionado
+        if (selectedMuscle === 'all' || muscle.includes(selectedMuscle)) {
+            exercise.classList.add('d-flex'); // Muestra el ejercicio
+            exercise.classList.remove('d-none');
+        } else {
+            exercise.classList.remove('d-flex'); // Oculta el ejercicio
+            exercise.classList.add('d-none');
+        }
+    });
+});

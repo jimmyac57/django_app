@@ -1,13 +1,13 @@
 from django.contrib import admin
-from .models import Rutina
-from .models import Ejercicio
-from .models import EjercicioRutina
+from .models import Workout
+from .models import Exercise
+from .models import ExerciseWorkout
 # Register your models here.
 
-admin.site.register(Rutina)
-@admin.register(Ejercicio)
+admin.site.register(Workout)
+@admin.register(Exercise)
 class EjercicioAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'primary_muscle', 'secondary_muscle')
+    list_display = ('name', 'primary_muscle', 'secondary_muscle')
     list_filter = ('primary_muscle',)
 
-admin.site.register(EjercicioRutina)
+admin.site.register(ExerciseWorkout)
