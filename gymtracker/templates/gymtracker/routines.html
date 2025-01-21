@@ -9,23 +9,24 @@
 {% block content %}
 {{ block.super }}
 <div class="container">
-    <div class="routines">
-        <h2>Routines</h2>
-        <a href="{% url 'crear_rutina' %}" class="btn btn-primary">Crear Nueva Rutina</a>
+    <div class="workouts">
+        <h2>Workouts</h2>
+        <a href="{% url 'create_workout' %}" class="btn btn-primary">Create new Workout</a>
         <hr>
-        <div class="routines-list">
-            {% if workout %}
-            <h3>Mis rutinas</h3>
-            {% endif %}
+        
+            {% if workouts %}
+            
+            <h3>My Workouts</h3>
+            <div class="workouts-list">
             <ul>
-                {% for rutina in rutinas %}
-    <li>
-        <a href="{% url 'detalle_rutina' rutina.id %}">{{ rutina.nombre }}</a>
-        <!-- Aquí puedes mostrar más detalles o linkear a otra vista -->
-    </li>
-    {% endfor %}
-            </ul>
+                {% for workout in workouts %}
+                    <li><a href="{% url 'workout_detail' workout.id %}">{{ workout.name}}</a></li>
+                {% endfor %}
+            {% else %}
+            <p>No workouts yet</p>
+            {% endif %}
         </div>
+        
     </div>
 </div>
 {% endblock %}

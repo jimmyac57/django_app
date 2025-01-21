@@ -1,0 +1,49 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Routines detail{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ workout.name }}</h2>
+    <h4>Created by: {{ workout.user.username }}</h4>
+
+    {% if workout.exercise_workouts.all %}
+        <div class="exercise-list">
+            {% for exercise_workout in workout.exercise_workouts.all %}
+                <div class="exercise-item">
+                    <h4>{{ exercise_workout.exercise.name }}</h4>
+                    <p>Description: {{ exercise_workout.exercise.description }}</p>
+                    <p>Primary Muscle: {{ exercise_workout.exercise.primary_muscle }}</p>
+                    <p>Secondary Muscle: {{ exercise_workout.exercise.secondary_muscle }}</p>
+                    <p>Equipment: {{ exercise_workout.exercise.equipment }}</p>
+                    <p>Rest Time: {{ exercise_workout.rest_time }}</p>
+                    <p>Order: {{ exercise_workout.order }}</p>
+
+                    <h5>Sets:</h5>
+                    {% if exercise_workout.sets.all %}
+                        <ul>
+                            {% for set in exercise_workout.sets.all %}
+                                <li>
+                                    Set {{ set.set_number }}:
+                                    {{ set.repetitions }} reps,
+                                    {{ set.weight }} {{ set.weight_unit }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No sets defined for this exercise.</p>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No exercises added to this workout yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+

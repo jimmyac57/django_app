@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 class Workout(models.Model):
     name = models.CharField(max_length=100)  
@@ -23,9 +24,9 @@ class Exercise(models.Model):
 
 # Exercises belonging to a workout
 class ExerciseWorkout(models.Model):
-    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)  
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE,related_name="exercise_workouts")  
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, null=True, blank=True)  
-    rest_time = models.DurationField(default='00:00:00', help_text="Rest time (HH:MM:SS)")  
+    rest_time = models.DurationField(default=timedelta(seconds=0), help_text="Rest time (HH:MM:SS)")  
     order = models.PositiveIntegerField(default=1, help_text="Order of the exercise in the workout")  
 
     class Meta:

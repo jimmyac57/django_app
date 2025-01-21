@@ -14,7 +14,7 @@
             <h2 class="card-title mb-0">Create New Routine</h2>
         </div>
         <div class="card-body">
-            <form action="{% url 'crear_rutina' %}" id="myForm" method="post">
+            <form action="{% url 'create_workout' %}" id="myForm" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
                     {{ form.as_p }}
