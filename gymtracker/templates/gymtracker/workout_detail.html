@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-{% block title %}Routines detail{% endblock %}
+
+{% block title %}Routines Detail{% endblock %}
 
 {% block css %}
 {% endblock %}
@@ -10,32 +11,30 @@
     <h2>{{ workout.name }}</h2>
     <h4>Created by: {{ workout.user.username }}</h4>
 
-    {% if workout.exercise_workouts.all %}
+    {% if exercises_with_forms %}
         <div class="exercise-list">
-            {% for exercise_workout in workout.exercise_workouts.all %}
+            {% for item in exercises_with_forms %}
                 <div class="exercise-item">
-                    <h4>{{ exercise_workout.exercise.name }}</h4>
-                    <p>Description: {{ exercise_workout.exercise.description }}</p>
-                    <p>Primary Muscle: {{ exercise_workout.exercise.primary_muscle }}</p>
-                    <p>Secondary Muscle: {{ exercise_workout.exercise.secondary_muscle }}</p>
-                    <p>Equipment: {{ exercise_workout.exercise.equipment }}</p>
-                    <p>Rest Time: {{ exercise_workout.rest_time }}</p>
-                    <p>Order: {{ exercise_workout.order }}</p>
+                    <h4>{{ item.exercise_workout.exercise.name }}</h4>
+                    <p>Description: {{ item.exercise_workout.exercise.description }}</p>
+                    <p>Primary Muscle: {{ item.exercise_workout.exercise.primary_muscle }}</p>
+                    <p>Secondary Muscle: {{ item.exercise_workout.exercise.secondary_muscle }}</p>
+                    <p>Equipment: {{ item.exercise_workout.exercise.equipment }}</p>
+                    <p>Rest Time: {{ item.exercise_workout.rest_time }}</p>
+                    <p>Order: {{ item.exercise_workout.order }}</p>
 
                     <h5>Sets:</h5>
-                    {% if exercise_workout.sets.all %}
-                        <ul>
-                            {% for set in exercise_workout.sets.all %}
-                                <li>
-                                    Set {{ set.set_number }}:
-                                    {{ set.repetitions }} reps,
-                                    {{ set.weight }} {{ set.weight_unit }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No sets defined for this exercise.</p>
-                    {% endif %}
+                    <ul>
+                        {% for set_data in item.set_forms %}
+                            <li>
+                                <form method="post" action="{% url 'update_set' set_data.set_id %}">
+                                    {% csrf_token %}
+                                    {{ set_data.form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Update Set</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 <hr>
             {% endfor %}
@@ -45,5 +44,3 @@
     {% endif %}
 </div>
 {% endblock %}
-
-

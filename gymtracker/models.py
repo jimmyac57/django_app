@@ -10,7 +10,6 @@ class Workout(models.Model):
     def __str__(self):
         return self.name
 
-# Individual exercises that can be added to a workout
 class Exercise(models.Model):
     name = models.CharField(max_length=100)  
     description = models.TextField(null=True, blank=True)
@@ -21,8 +20,6 @@ class Exercise(models.Model):
 
     def __str__(self):
         return self.name
-
-# Exercises belonging to a workout
 class ExerciseWorkout(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE,related_name="exercise_workouts")  
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, null=True, blank=True)  
@@ -35,12 +32,11 @@ class ExerciseWorkout(models.Model):
         ordering = ['order'] 
     
     def save(self, *args, **kwargs):
-        # Automatically assign the order if it's a new object
         if not self.pk:
             last_order = ExerciseWorkout.objects.filter(workout=self.workout).aggregate(
                 max_order=models.Max('order')
             )['max_order']
-            self.order = (last_order or 0) + 1  # Increment the last order by 1
+            self.order = (last_order or 0) + 1 
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -58,7 +54,7 @@ class Set(models.Model):
         related_name="sets"
     ) 
     weight = models.FloatField(help_text="Weight used in this set")
-    weight_unit = models.CharField(max_length=2, choices=WEIGHT_UNITS, default='kg')  # Limited options
+    weight_unit = models.CharField(max_length=2, choices=WEIGHT_UNITS, default='kg')  
     repetitions = models.PositiveIntegerField(help_text="Number of repetitions in this set")
     set_number = models.PositiveIntegerField(help_text="Set number (e.g., 1, 2, 3)")
 
