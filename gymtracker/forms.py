@@ -9,7 +9,6 @@ class CreateWorkoutForm(forms.ModelForm):
 
 class SetForm(forms.Form):
     weight = forms.FloatField()
-    weight_unit = forms.ChoiceField(choices=Set.WEIGHT_UNITS)
     repetitions = forms.IntegerField()
     set_number = forms.IntegerField()
     workout_exercise_id = forms.IntegerField(widget=forms.HiddenInput())  

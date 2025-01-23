@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta
+from django.core.exceptions import ValidationError
 
 class Workout(models.Model):
     name = models.CharField(max_length=100)  
@@ -24,7 +25,12 @@ class ExerciseWorkout(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE,related_name="exercise_workouts")  
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, null=True, blank=True)  
     rest_time = models.DurationField(default=timedelta(seconds=0), help_text="Rest time (HH:MM:SS)")  
-    order = models.PositiveIntegerField(default=1, help_text="Order of the exercise in the workout")  
+    order = models.PositiveIntegerField(default=1, help_text="Order of the exercise in the workout")
+    WEIGHT_UNITS = [
+        ('kg', 'Kilograms'),
+        ('lb', 'Pounds'),
+    ] 
+    weight_unit = models.CharField(max_length=2, choices=WEIGHT_UNITS, default='kg')  
 
     class Meta:
         verbose_name = "Workout Exercise"
@@ -42,19 +48,15 @@ class ExerciseWorkout(models.Model):
     def __str__(self):
         return f"{self.exercise.name} in {self.workout.name}"
     
-class Set(models.Model):
-    WEIGHT_UNITS = [
-        ('kg', 'Kilograms'),
-        ('lb', 'Pounds'),
-    ]
 
+
+class Set(models.Model):
     workout_exercise = models.ForeignKey(
         ExerciseWorkout, 
         on_delete=models.CASCADE, 
         related_name="sets"
     ) 
     weight = models.FloatField(help_text="Weight used in this set")
-    weight_unit = models.CharField(max_length=2, choices=WEIGHT_UNITS, default='kg')  
     repetitions = models.PositiveIntegerField(help_text="Number of repetitions in this set")
     set_number = models.PositiveIntegerField(help_text="Set number (e.g., 1, 2, 3)")
 
@@ -63,5 +65,13 @@ class Set(models.Model):
         verbose_name_plural = "Sets"
         ordering = ['set_number']
 
+    def clean(self):
+        if self.weight < 0:
+            raise ValidationError({'weight': 'Weight cannot be negative.'})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Llama a `clean` para realizar las validaciones antes de guardar
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Set {self.set_number} - {self.repetitions} reps, {self.weight} {self.weight_unit}"
+        return f"Set {self.set_number} - {self.repetitions} reps, {self.weight}"
