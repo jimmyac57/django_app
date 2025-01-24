@@ -6,6 +6,7 @@ from django.db import transaction
 from datetime import timedelta
 import json
 from django.http import JsonResponse
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -14,63 +15,82 @@ def workout_view(request):
     workouts = Workout.objects.filter(user=request.user)
     return render(request, 'gymtracker/routines.html', {'workouts': workouts})
 
+from django.db import transaction, IntegrityError
+from django.core.exceptions import ValidationError
+
 def create_workout(request):
     try:
         if request.method == 'POST':
             form = CreateWorkoutForm(request.POST)
             if form.is_valid():
-                with transaction.atomic(): 
+                with transaction.atomic():
+                    # Crear el entrenamiento
                     workout = form.save(commit=False)
                     workout.user = request.user
                     workout.save()
 
-                    exercise_ids = request.POST.getlist('ejercicios[]')  
+                    # Obtener los ejercicios seleccionados
+                    exercise_ids = request.POST.getlist('ejercicios[]')
                     if not exercise_ids:
                         raise ValueError("You must select at least one exercise for the workout.")
 
                     exercises = Exercise.objects.filter(id__in=exercise_ids)
-
                     if not exercises.exists():
                         raise ValueError("The selected exercises do not exist.")
 
+                    # Asociar ejercicios al entrenamiento
                     for order, exercise in enumerate(exercises, start=1):
                         exercise_workout = ExerciseWorkout.objects.create(
-                        workout=workout,
-                        exercise=exercise,
-                        rest_time=timedelta(seconds=30), 
-                        order=order
+                            workout=workout,
+                            exercise=exercise,
+                            rest_time=timedelta(seconds=30),
+                            order=order
                         )
 
-                    # Crear una serie por defecto
+                        # Crear un set por defecto
                         Set.objects.create(
                             workout_exercise=exercise_workout,
                             weight=0,
                             repetitions=0,
-                            set_number=1  
+                            set_number=1
                         )
+
                     messages.success(request, 'Workout created successfully.')
                     return redirect('workouts')
             else:
                 messages.error(request, 'Error creating your workout. Please check the form.')
+        else:
+            # Si no es POST, mostrar el formulario vacío
+            form = CreateWorkoutForm()
 
-        form = CreateWorkoutForm()
+        # Obtener los ejercicios y músculos
         exercises = Exercise.objects.all()
         muscles = Exercise.objects.values_list('primary_muscle', flat=True).distinct()
 
         return render(request, 'gymtracker/create_workout.html', {
             'form': form,
-            'exercises': exercises,  
-            'muscles': muscles,  
+            'exercises': exercises,
+            'muscles': muscles,
         })
+
+    # Manejo de errores específicos
     except ValueError as e:
-       
-        messages.error(request, str(e))
+        messages.error(request, f"Validation error: {e}")
+        return redirect('workouts')
+    except ValidationError as e:
+        messages.error(request, f"Validation error: {', '.join(e.messages)}")
+        return redirect('workouts')
+    except IntegrityError as e:
+        messages.error(request, "Database integrity error. Please try again.")
         return redirect('workouts')
     except Exception as e:
-       
-        messages.error(request, 'An unexpected error occurred. Please try again.')
+        # Mostrar errores más detallados en modo desarrollo
+        if settings.DEBUG:
+            import traceback
+            messages.error(request, f"Unexpected error: {e} - {traceback.format_exc()}")
+        else:
+            messages.error(request, 'An unexpected error occurred. Please try again later.')
         return redirect('workouts')
-    
 
 def workout_detail(request, workout_id):
     workout = Workout.objects.get(id=workout_id)
