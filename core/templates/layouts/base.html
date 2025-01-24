@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
@@ -32,16 +33,16 @@
                                 <a class="nav-link" href="{% url 'activity_logger' %}">Log</a>
                             </li>
 
-                            <!-- <li class="nav-item dropdown">
+                            <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="routinesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Workouts
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="routinesDropdown">
-                                    <li><a class="dropdown-item" href="{% url 'rutinas' %}">Workouts List</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'workouts' %}">Workouts List</a></li>
                                 </ul>
                             </li>
 
-                            <li class="nav-item dropdown">
+                            <!-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="goalsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Goals
                                 </a>
@@ -73,7 +74,10 @@
         {% if messages %}
         <div class="alert-container">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endfor %}
         </div>
         {% endif %}

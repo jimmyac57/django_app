@@ -3,8 +3,15 @@ from django.contrib.auth.models import User
 from django.utils.timezone import localtime
 
 # Create your models here.
+class Activity(models.Model):
+    name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name  
+
 class TimeLogger(models.Model):
-    activity = models.CharField(max_length=200)
+    activity = models.ForeignKey(Activity, on_delete=models.SET_NULL, null=True, blank=True)
     time_start = models.DateTimeField(auto_now_add=True)
     time_end = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

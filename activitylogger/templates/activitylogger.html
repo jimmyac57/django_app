@@ -13,16 +13,17 @@
 <div class="text-center mb-4">
     <a href="{% url 'finished_activities' %}" class="btn btn-secondary">View Finished Logs</a>
 </div>
-{% if activity %}
-    {% for activity in activity %}
+
+{% if time_active %}
+    {% for active in time_active %}
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
-            <h2 class="card-title">Activity: {{ activity.activity }}</h2>
-            <h3 class="card-subtitle text-muted">Start Moment: {{ activity.time_start|localtime|date:"H:i:s" }}</h3>
-            <p id="elapsed-time-{{ activity.id }}" data-start-time="{{ activity.time_start|localtime|date:'c' }}" class="mt-3">
+            <h2 class="card-title">Activity: {{ active.activity.name }}</h2>
+            <h3 class="card-subtitle text-muted">Start Moment: {{ active.time_start|localtime|date:"H:i:s" }}</h3>
+            <p id="elapsed-time-{{ active.id }}" data-start-time="{{ active.time_start|localtime|date:'c' }}" class="mt-3">
                 <strong>Elapsed Time:</strong> 00:00:00
             </p>
-            <form action="{% url 'end_activity' activity.id %}" method="post">
+            <form action="{% url 'end_activity' active.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger mt-3">Finish current Activity</button>
             </form>
@@ -38,17 +39,35 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="id_activity" class="form-label">Activity:</label>
-                {{ form.activity }}
+                <select id="id_activity" name="activity" class="form-select">
+                    <option value="" selected>Select an Activity</option>
+                    {% for activity in form.fields.activity.queryset %}
+                        <option value="{{ activity.id }}">{{ activity.name }}</option>
+                    {% endfor %}
+                </select>
+                <span class="invalid-feedback">Please select an option</span>
             </div>
             <div class="text-end">
-                <button class="btn btn-success">Start</button>
+                <button type="button" class="btn btn-secondary" id="new-activity-btn">Create new Activity</button>
+                <button type="submit" class="btn btn-success">Start timer</button>
             </div>
         </form>
     </div>
-    
+    <div id="new-activity-form" class="card p-4 shadow-sm mx-auto mt-4" style="max-width: 500px; display: none;">
+        <h4 class="text-center mb-4">Create New Activity</h4>
+        <form action="{% url 'add_activity' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Activity Name:</label>
+                <input type="text" name="name" id="id_name" class="form-control" placeholder="Enter activity name">
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">Add Activity</button>
+            </div>
+        </form>
+    </div>
 {% endif %}
 {% endblock %}
-
 {% block js %}
     {{ block.super }}
     <script src="{% static 'js/activitylogger.js' %}"></script>

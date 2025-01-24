@@ -1,0 +1,88 @@
+{% extends 'gymtracker/base_gymtracker.html' %}
+{% load static %}
+{% block title %}Create New Routine{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/exercises.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title mb-0">Create New Routine</h2>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'create_workout' %}" id="myForm" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <hr>
+                <button type="button" id="open-modal" class="btn btn-secondary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#modal">
+                    Add Exercise
+                </button>
+                
+                <hr>
+                <!-- Contenedor para ejercicios seleccionados -->
+                <div id="contenedor-seleccionados" class="mt-3"></div>
+                <button type="submit" class="btn btn-success btn-lg">
+                    Save Routine
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-custom">
+        <div class="modal-content">
+            <!-- Encabezado del modal -->
+            <div class="modal-header sticky-top">
+                <h5 class="modal-title" id="modalLabel">Exercises</h5>
+                <div class="ms-auto">
+                    <select id="filter-muscle" class="form-select form-select-sm">
+                        <option value="all">All</option>
+                        {% for muscle in muscles %}
+                        <option value="{{ muscle }}">{{ muscle }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Cuerpo del modal (desplazable) -->
+            <div class="modal-body">
+                <div id="container-exercises" class="list-group">
+                    {% for exercise in exercises %}
+                    <div class="exercise-item list-group-item d-flex align-items-center justify-content-between"
+                         data-id="{{ exercise.id }}" data-muscle="{{ exercise.primary_muscle }}">
+                        <img src="{{ exercise.image_path }}" alt="{{ exercise.name }}" class="exercise-image me-3">
+                        <div class="exercise-info">
+                            <h5 class="exercise-name mb-1">{{ exercise.name }}</h5>
+                            <p class="exercise-muscle text-muted mb-0">{{ exercise.primary_muscle }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btn-guardar-seleccion" data-bs-dismiss="modal">
+                    Add Selected Exercises
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="module" src="{% static 'js/exercises.js' %}"></script>
+{% endblock %}

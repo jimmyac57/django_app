@@ -1,0 +1,134 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Routines Detail{% endblock %}
+
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<style>
+    .custom-select {
+        background-color: #343a40; /* Igual al fondo del encabezado */
+        color: #fff; /* Texto blanco */
+        border: 1px solid #343a40; /* Borde igual al fondo */
+        width: auto; /* Para que sea más pequeño */
+        padding: 2px 8px; /* Espaciado interno más pequeño */
+        font-size: 0.875rem; /* Tamaño de fuente reducido */
+        height: auto; /* Asegurar altura mínima */
+    }
+
+    .custom-select:focus {
+        border-color: #495057; /* Color del borde al enfocar */
+        outline: none; /* Sin contorno azul predeterminado */
+    }
+
+    .custom-select option {
+        background-color: #fff; /* Fondo blanco para las opciones desplegables */
+        color: #000; /* Texto negro */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-center">{{ workout.name }}</h2>
+        <h5 class="text-muted text-center">Created by: {{ workout.user.username }}</h5>
+
+        {% if exercises_with_forms %}
+            <div class="exercise-list mt-4" data-workout-id="{{ workout.id }}">
+                {% for item in exercises_with_forms %}
+                    <div class="exercise-item card mb-4 shadow-sm" data-exercise-id="{{ item.exercise_workout.id }}">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ item.exercise_workout.exercise.name }}</h4>
+                            <p class="text-muted">{{ item.exercise_workout.exercise.description }}</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Primary Muscle:</strong> {{ item.exercise_workout.exercise.primary_muscle }}</p>
+                                    <p><strong>Secondary Muscle:</strong> {{ item.exercise_workout.exercise.secondary_muscle }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Equipment:</strong> {{ item.exercise_workout.exercise.equipment }}</p>
+                                    <div class="mb-3">
+                                        <label for="rest-time-{{ item.exercise_workout.id }}" class="form-label"><strong>Rest Time:</strong></label>
+                                        <input 
+                                            type="time" 
+                                            class="form-control rest-time" 
+                                            id="rest-time-{{ item.exercise_workout.id }}" 
+                                            name="rest_time_{{ item.exercise_workout.id }}" 
+                                            value="{{ item.rest_time }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5>Sets:</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped align-middle">
+                                    <!-- Table Header -->
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">Set #</th>
+                                            <th scope="col">
+                                                <select 
+                                                    class="form-select form-select-sm weight-unit-selector d-inline-block ms-2 custom-select" 
+                                                    name="weight_unit_{{ item.exercise_workout.id }}">
+                                                    <option value="kg" {% if item.exercise_workout.weight_unit == "kg" %}selected{% endif %}>Kg</option>
+                                                    <option value="lb" {% if item.exercise_workout.weight_unit == "lb" %}selected{% endif %}>Lbs</option>
+                                                </select>
+                                            </th>
+                                            <th scope="col">Reps</th>
+                                            <th scope="col" class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- Table Body -->
+                                    <tbody>
+                                        {% for set_data in item.set_forms %}
+                                            <tr class="set-item" data-set-id="{{ set_data.set_id }}" data-set-number="{{ set_data.set_number }}">
+                                                <td class="set-number">{{ set_data.set_number }}</td>
+                                                <td>
+                                                    <input 
+                                                        type="number" 
+                                                        class="form-control form-control-sm set-weight" 
+                                                        value="{{ set_data.weight }}" 
+                                                        step="0.1">
+                                                </td>
+                                                <td>
+                                                    <input 
+                                                        type="number" 
+                                                        class="form-control form-control-sm set-reps" 
+                                                        value="{{ set_data.repetitions }}" 
+                                                        min="1">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-set">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm add-set">Añadir Serie</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary mt-4 save-changes">Guardar Cambios</button>
+            </div>
+        {% else %}
+            <div class="alert alert-warning text-center mt-4">
+                <p>No exercises added to this workout yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script src="{% static 'js/workout_detail.js' %}"></script>
+{% endblock %}
