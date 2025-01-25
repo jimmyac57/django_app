@@ -110,29 +110,6 @@ def workout_detail(request, workout_id):
     })
 
 
-def update_set(request, set_id):
-    set_instance = get_object_or_404(Set, id=set_id)
-    if request.method == 'POST':
-        form = SetForm(request.POST)
-        if form.is_valid():
-            set_instance.weight = form.cleaned_data['weight']
-            set_instance.repetitions = form.cleaned_data['repetitions']
-            set_instance.set_number = form.cleaned_data['set_number']
-            set_instance.save()
-            messages.success(request, 'Set updated successfully.')
-            return redirect('workout_detail', workout_id=set_instance.workout_exercise.workout.id)
-        else:
-            messages.error(request, 'There was an error updating the set. Please check the form.')
-    else:
-        form = SetForm(initial={
-            'weight': set_instance.weight,
-            'repetitions': set_instance.repetitions,
-            'set_number': set_instance.set_number,
-            'workout_exercise_id': set_instance.workout_exercise.id,
-        })
-
-    return render(request, 'gymtracker/update_set.html', {'form': form, 'set': set_instance})
-
 
 @csrf_exempt
 def update_exercises(request):
