@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Workout, Exercise, ExerciseWorkout, Set
-from .forms import CreateWorkoutForm, SetForm, ExerciseWorkoutForm
+from .forms import CreateWorkoutForm
 from django.contrib import messages
 from django.db import transaction
 from datetime import timedelta
@@ -10,13 +10,14 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def workout_view(request):
     workouts = Workout.objects.filter(user=request.user)
     return render(request, 'gymtracker/routines.html', {'workouts': workouts})
 
-
+@login_required
 def create_workout(request):
     try:
         if request.method == 'POST':
@@ -80,7 +81,7 @@ def create_workout(request):
             messages.error(request, 'An unexpected error occurred. Please try again later.')
         return redirect('workouts')
 
-
+@login_required
 def workout_detail(request, workout_id):
     workout = Workout.objects.get(id=workout_id)
     exercises_with_forms = []
@@ -110,7 +111,7 @@ def workout_detail(request, workout_id):
     })
 
 
-
+@login_required
 @csrf_exempt
 def update_exercises(request):
     if request.method == "POST":
