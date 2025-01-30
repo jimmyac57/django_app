@@ -70,8 +70,69 @@ class Set(models.Model):
             raise ValidationError({'weight': 'Weight cannot be negative.'})
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Llama a `clean` para realizar las validaciones antes de guardar
+        self.full_clean()  
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Set {self.set_number} - {self.repetitions} reps, {self.weight}"
+
+
+class LoggedWorkout(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    original_workout = models.ForeignKey(
+        Workout, 
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Rutina original"
+    )
+    date = models.DateField(auto_now_add=True)
+    notes = models.TextField(null=True, blank=True, verbose_name="Notas adicionales")
+
+    def __str__(self):
+        return f"{self.date} - {self.original_workout.name if self.original_workout else 'Custom Workout'}"
+
+class LoggedExercise(models.Model):
+    logged_workout = models.ForeignKey(
+        LoggedWorkout, 
+        on_delete=models.CASCADE,
+        related_name='logged_exercises'
+    )
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Ejercicio original"
+    )
+    exercise_name = models.CharField(max_length=100, verbose_name="Nombre del ejercicio")
+    rest_time = models.DurationField(verbose_name="Tiempo de descanso")
+    order = models.PositiveIntegerField(verbose_name="Orden en la rutina")
+    weight_unit = models.CharField(
+        max_length=2, 
+        choices=ExerciseWorkout.WEIGHT_UNITS, 
+        default='kg',
+        verbose_name="Unidad de peso"
+    )
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.exercise_name} (Logged)"
+
+class LoggedSet(models.Model):
+    logged_exercise = models.ForeignKey(
+        LoggedExercise, 
+        on_delete=models.CASCADE,
+        related_name='logged_sets'
+    )
+    weight = models.FloatField(verbose_name="Peso")
+    repetitions = models.PositiveIntegerField(verbose_name="Repeticiones")
+    set_number = models.PositiveIntegerField(verbose_name="Número de serie")
+
+    class Meta:
+        ordering = ['set_number']
+
+    def __str__(self):
+        return f"Logged Set {self.set_number}"
