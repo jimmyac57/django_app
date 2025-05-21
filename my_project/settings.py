@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'gymtracker',
     'goaltracker',
     'activitylogger',
+    'profiles',
 ]
 
 MIDDLEWARE = [
