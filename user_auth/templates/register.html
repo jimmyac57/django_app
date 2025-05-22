@@ -4,56 +4,77 @@
 {% block content %}
 
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h2 class="mb-0">Register</h2>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post" novalidate>
-                        {% csrf_token %}
-                        <div class="form-group mb-3">
-                            <label for="username" class="form-label">Username:</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-                        </div>
-                        <div class="form-group mb-3 position-relative">
-                            <label for="password" class="form-label">Password:</label>
-                            <div class="input-group">
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                    <i class="fa-solid fa-eye" id="togglePasswordConfirmationIcon"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4 position-relative">
-                            <label for="password_confirmation" class="form-label">Password Confirmation:</label>
-                            <div class="input-group">
-                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Confirm your password" required>
-                                <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">
-                                    <i class="fa-solid fa-eye" id="togglePasswordConfirmationIcon"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center bg-light py-2">
-                    <small class="text-muted">© Jimmy APP</small>
-                </div>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white text-center py-3">
+          <h2 class="mb-0">Register</h2>
         </div>
+        <div class="card-body p-4">
+          <form method="post" novalidate autocomplete="off">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors.0 }}</div>
+            {% endif %}
+
+            <div class="form-group mb-3">
+              {{ form.username.label_tag }}
+              {{ form.username }}
+              {% if form.username.errors %}
+              <div class="text-danger">{{ form.username.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-group mb-3">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {% if form.email.errors %}
+              <div class="text-danger">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-group mb-3 position-relative">
+              {{ form.password1.label_tag }}
+              <div class="input-group">
+                {{ form.password1 }}
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                  <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+              {% if form.password1.errors %}
+              <div class="text-danger">{{ form.password1.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-group mb-4 position-relative">
+              {{ form.password2.label_tag }}
+              <div class="input-group">
+                {{ form.password2 }}
+                <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">
+                  <i class="fa-solid fa-eye" id="togglePasswordConfirmationIcon"></i>
+                </button>
+              </div>
+              {% if form.password2.errors %}
+              <div class="text-danger">{{ form.password2.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </div>
+          </form>
+
+        </div>
+        <div class="card-footer text-center bg-light py-2">
+          <small class="text-muted">© Jimmy APP</small>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}
 {% block js %}
-    {{ block.super }}
-    <script src="{% static 'js/user_auth.js' %}"></script>
+{{ block.super }}
+<script src="{% static 'js/register_toggle.js' %}"></script>
 {% endblock %}
